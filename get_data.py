@@ -1,8 +1,13 @@
 from pyyoutube import Api
 import requests
 import re
+import sys
 
 CSV_NAME = "channels.csv"
+
+if len(sys.argv) > 1:
+    CSV_NAME = sys.argv[1]
+
 DELIMER = ";"
 
 def get_channel_names():
@@ -51,7 +56,7 @@ def update_csv(channel_names, view_counts, sub_counts):
         f.write("\n".join(lines))
 
 if __name__ == "__main__":
-    api = Api(api_key="AIzaSyCuvRpAelWkJa0yfd3RjnxYv_3wiAs1dRo")
+    api = Api(api_key="YOUR_API_KEY")
     channel_names = get_channel_names()
     ids = [get_channelid(channel_name) for channel_name in channel_names]
     channels = api.get_channel_info(channel_id=",".join(ids))
