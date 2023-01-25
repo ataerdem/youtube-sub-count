@@ -66,7 +66,7 @@ def update_csv(channel_names, view_counts, sub_counts):
         f.write("\n".join(lines))
 
 if __name__ == "__main__":
-    api = Api(api_key="AIzaSyDoFKcrNGtY7VXSZYy0foMC5rxllmLVSgk")
+    api = Api(api_key="YOURAPIKEY")
     channel_names = get_channel_names()
     ids = [get_channelid(channel_name) for channel_name in channel_names]
     channels = api.get_channel_info(channel_id=",".join(ids))
