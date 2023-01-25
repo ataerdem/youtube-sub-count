@@ -30,11 +30,21 @@ def get_channelid(channel_name):
     channel_id = re.findall(r'itemprop="channelId" content="(.+?)"', r)[0]
     return channel_id
 
-def get_view_count(ids, n=10):
+def get_video_id(video):
+    """
+    This function gets the video id from a video object
+    """
+    try:
+        id_ = video.to_dict()["contentDetails"]["upload"]["videoId"]
+    except:
+        id_ = video.to_dict()["playlistItem"]["resourceId"]["kind"]["videoId"]
+    return id_
+
+def get_view_count(ids, n=1):
     """
     This function gets the channel object and uses the api to get the average view count of the latest n videos
     """
-    vid_ids = [[item.to_dict()["contentDetails"]["upload"]["videoId"] for item in api.get_activities_by_channel(channel_id=id_, count=n).items] for id_ in ids]
+    vid_ids = [[get_video_id(item) for item in api.get_activities_by_channel(channel_id=id_, count=n).items] for id_ in ids]
     view_counts = [int(sum([get_view(vid_id) for vid_id in vid_id])/n) for vid_id in vid_ids]
     return view_counts
 
@@ -56,7 +66,7 @@ def update_csv(channel_names, view_counts, sub_counts):
         f.write("\n".join(lines))
 
 if __name__ == "__main__":
-    api = Api(api_key="YOUR_API_KEY")
+    api = Api(api_key="AIzaSyDoFKcrNGtY7VXSZYy0foMC5rxllmLVSgk")
     channel_names = get_channel_names()
     ids = [get_channelid(channel_name) for channel_name in channel_names]
     channels = api.get_channel_info(channel_id=",".join(ids))
